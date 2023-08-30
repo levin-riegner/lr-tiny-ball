@@ -1,12 +1,16 @@
 import World from "./world.js";
 import ScoreCounter from "./scoreCounter.js";
-import Client from "./client.js";
+import ServerClient from "./serverClient.js";
+import PlayerUI from "./playerUI.js";
 
-const canvasContainer = document.getElementById("tinyball-container");
-const worldConfig = {
+const container = document.getElementById("tinyball-container");
+const serverClient = new ServerClient();
+const world = new World(container, {
   ballEntry: [0.1, 0.1],
-};
-const world = new World(canvasContainer, worldConfig);
-const score = new ScoreCounter(canvasContainer, world);
+});
+const score = new ScoreCounter(container, world);
+const playerUI = new PlayerUI(container);
 
-const client = new Client();
+serverClient.onChange = (e) => {
+  playerUI.drawPlayerUI(e);
+}
