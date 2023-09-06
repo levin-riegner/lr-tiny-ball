@@ -9,8 +9,7 @@ export default class PlayerUI {
     this.container.appendChild(this.iconContainer);
 
     this.iconContainer.style.display = "flex";
-    this.iconContainer.style.position = "absolute";
-    this.iconContainer.style.padding = "10px";
+    this.iconContainer.style.gap = "5px";
 
 
   }
@@ -18,18 +17,23 @@ export default class PlayerUI {
   createPlayerIcon(client) {
     // Create a div for the player icon
     const iconDiv = document.createElement("div");
-    iconDiv.style.width = "50px"; // adjust size as needed
-    iconDiv.style.height = "50px";
-    iconDiv.style.borderRadius = "50%";
+    iconDiv.style.borderRadius = "12px";
     iconDiv.style.border = "2px solid white";
     iconDiv.style.boxShadow = "2px 3px 8px 0px rgba(0,0,0,0.15)";
-    iconDiv.style.backgroundColor = client.color;
-    iconDiv.style.marginRight = "10px"; // spacing between icons
+    iconDiv.style.backgroundColor = "white";
     iconDiv.style.display = "inline-block"; // to display in line
     iconDiv.style.textAlign = "center";
     iconDiv.style.display = "flex";
     iconDiv.style.justifyContent = "center";
-    iconDiv.style.alignItems = "center";
+    iconDiv.style.overflow = "hidden";
+
+    const letterContainer = document.createElement("div");
+    letterContainer.style.display = "flex";
+    letterContainer.style.justifyContent = "center";
+    letterContainer.style.width = "40px";
+    letterContainer.style.height = "50px";
+    letterContainer.style.backgroundColor = client.color;
+    iconDiv.appendChild(letterContainer);
 
     const letter = document.createElement("p");
     letter.innerText = client.letter;
@@ -37,7 +41,26 @@ export default class PlayerUI {
     letter.style.fontWeight = "bold";
     letter.style.fontFamily = "sans-serif";
     letter.style.color = "white";
-    iconDiv.appendChild(letter);
+    letter.style.alignSelf = "center";
+    letterContainer.appendChild(letter);
+
+    const counterContainer = document.createElement("div");
+    counterContainer.style.display = "flex";
+    counterContainer.style.justifyContent = "center";
+    counterContainer.style.alignItems = "center";
+    counterContainer.style.width = "40px";
+    counterContainer.style.height = "50px";
+    counterContainer.style.borderLeft = "2px solid white";
+    counterContainer.style.backgroundColor = client.color;
+    iconDiv.appendChild(counterContainer);
+
+    const counter = document.createElement("p");
+    counter.innerText = "0";
+    counter.style.fontSize = "30px";
+    counter.style.fontWeight = "bold";
+    counter.style.fontFamily = "sans-serif";
+    counter.style.color = "white";
+    counterContainer.appendChild(counter);
 
     return iconDiv;
   }

@@ -3,7 +3,7 @@ import Bucket from "./bucket.js";
 
 export default class World {
   constructor(canvasContainer, worldConfig) {
-    // App config
+    // Config
     this.ballEntry = worldConfig.ballEntry ?? [0.5, 0.5];
     this.ballWidth = 20;
     this.targetEntry = worldConfig.targetEntry ?? [0.9, 0.2];
@@ -42,10 +42,7 @@ export default class World {
 
     // Style canvas
     this.render.canvas.style.borderRadius = "25px";
-    this.render.canvas.style.position = "absolute";
     this.render.canvas.style.top = 0;
-    this.render.canvas.style.left = "50%";
-    this.render.canvas.style.transform = "translateX(-50%)";
     this.render.canvas.style.transformOrigin = "left top";
     this.render.canvas.style.margin = "0 auto";
 
@@ -68,10 +65,7 @@ export default class World {
   }
 
   drawCanvas() {
-    // Render setup
     Matter.Render.run(this.render);
-
-    // Run the gameloop
     Matter.Runner.run(this.runner, this.engine);
   }
 
@@ -114,19 +108,3 @@ export default class World {
     this.render.canvas.style.scale = this.scale;
   }
 }
-
-// // Add mouse control
-// var mouse = Matter.Mouse.create(render.canvas);
-// var mouseConstraint = Matter.MouseConstraint.create(engine, {
-//   mouse: mouse,
-//   constraint: {
-//     stiffness: 0.2,
-//     render: {
-//       visible: false,
-//     },
-//   },
-// });
-
-// Composite.add(engine.world, mouseConstraint);
-// // Keep render in sync with mouse
-// render.mouse = mouse;

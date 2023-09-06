@@ -3,55 +3,60 @@ const http = require("http");
 const { v4: uuidv4 } = require("uuid");
 const { broadcast, getClientsInfo } = require("./utils");
 
+const port = process.env.PORT || 3000;
 const server = http.createServer();
 const wss = new WebSocket.Server({ server });
-
 const clients = new Map();
 
+// Start server
+server.listen(port, () => {
+  console.log(`WebSocket server is running on port ${port}`);
+});
 
+// Create WebSocket connection
 wss.on("connection", (ws) => {
 
-  // Create unique id for client and keep track of it
+  // Create unique client data
   const clientId = uuidv4();
-  const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+  const randomColor = "#" + (Math.floor(Math.random() * 16777215).toString(16)).padStart(6, '0');
   const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
   const clientDetails = { id: clientId, color: randomColor, letter: randomLetter };
+
+  // Store client data
   clients.set(clientId, { ws: ws, ...clientDetails });
 
-  // Log connection info
+  // TERMINAL: Log status
   console.log(`Client connected: ${clientId} Total clients: ${clients.size}`);
 
-  // Send welcome message to client
-  const welcomeData = JSON.stringify({
-    client: clientDetails, connectedClients: getClientsInfo(clients), event: "init"
-  });
-  ws.send(welcomeData);
+  // CLIENT: Send initial data to client
+  ws.send(
+    JSON.stringify({
+      client: clientDetails,
+      connectedClients: getClientsInfo(clients),
+      event: "init"
+    })
+  );
 
-  // Inform other clients that a new client has joined
+  // BROADCAST: Client details
   const newClientMessage = JSON.stringify({ client: clientDetails, event: "join" });
   broadcast(WebSocket, clients, newClientMessage, ws);
 
-  // Listen for messages from the client
+  // Listen for client messages
   ws.on("message", (message) => {
     console.log(message);
   });
 
-  // Listen for client disconnection
+  // Listen for client disconnect
   ws.on("close", () => {
 
     // Stop trackign client
     clients.delete(clientId);
 
-    // Log connection info
+    // TERMINAL: Log status
     console.log(`Client disconnected: ${clientId} Total clients: ${clients.size}`);
 
-    // Inform other clients that a client has left
+    // BROADCAST: Status update
     const leaveMessage = JSON.stringify({ client: clientDetails, event: "leave" });
-    broadcast(WebSocket, clients, leaveMessage);
+    broadcast(WebSocket, clients, leaveMessage, ws);
   });
-});
-
-const port = process.env.PORT || 3000;
-server.listen(port, () => {
-  console.log(`WebSocket server is running on port ${port}`);
 });

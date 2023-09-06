@@ -4,35 +4,12 @@
   padding: 0;
   border-width: 0;
 }
+
 body {
   min-height: 100vh;
-  display: flex;
   padding: 25px;
 }
-#tinyball-container {
-  max-height: 80vh;
-  /* flex-grow: 1;
-  position: relative;
-  overflow: hidden;
-  background: red; */
-}
-#ui-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-}
-#ui-team-counter {
-  position: absolute;
-  bottom: 25px;
-  right: 25px;
-  font-size: 1.5rem;
-  color: #fff;
-  text-shadow: 0 0 10px #000;
-}
+
+#wrapper {}
+
+#ui-container {}
